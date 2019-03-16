@@ -7,9 +7,19 @@
 		document.getElementById('canvas').appendChild(app.view);
 	});
 
-	const main = () => {
+	// リソース読み込み
+	const manifest = {
+		'buri_hamachi': 'assets/mp3/buri_hamachi.mp3'
 	};
 
-	main();
+	const loader = PIXI.loader;
+
+	Object.entries(manifest).forEach(([key, value]) => {
+		loader.add(key, value);
+	});
+
+	loader.load((loader, resources) => {
+		// resources['buri_hamachi'].sound.play({loop: true, singleInstance: true});
+	});
 
 })();
