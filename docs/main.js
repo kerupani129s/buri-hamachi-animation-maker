@@ -90,12 +90,14 @@
 
 		const animation = new AnimatedSpriteByBeat(frames);
 
+		animation.loop = false;
+
 		app.stage.addChild(animation);
 
 		// 
 		window.addEventListener('click', () => {
-			animation.play();
-			music.play({loop: true});
+			animation.gotoAndPlay(0);
+			music.play();
 		});
 
 	};
