@@ -1,0 +1,42 @@
+/* 一般 */
+html, body, div {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+/* エディター */
+#editor {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+#editor table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* キャンバス */
+#canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #888;
+}
+
+#canvas>canvas:first-of-type {
+	max-width: 100vw;
+	max-height: 100vh;
+	width: calc(100vh * 4 / 3);
+	height: calc(100vw * 3 / 4);
+}
