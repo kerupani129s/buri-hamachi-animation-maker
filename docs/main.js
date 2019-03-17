@@ -96,8 +96,13 @@
 
 		// 
 		window.addEventListener('click', () => {
-			animation.gotoAndPlay(0);
-			music.play();
+			if ( animation.playing || music.isPlaying ) {
+				animation.stop();
+				music.stop();
+			} else {
+				animation.gotoAndPlay(0);
+				music.play();
+			}
 		});
 
 	};
