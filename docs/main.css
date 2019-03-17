@@ -9,8 +9,23 @@ html, body {
 	height: 100%;
 }
 
-/* キャンバスサイズ変更 */
+/* エディター */
+#editor {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+#editor table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* キャンバス */
 #canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
 	height: 100%;
 	display: flex;

@@ -1,23 +1,67 @@
 (() => {
 
-	const manifest = {
-		'frame01': 'assets/png/test01.png',
-		'frame02': 'assets/png/test02.png',
-		'frame03': 'assets/png/test03.png',
-		'frame04': 'assets/png/test04.png',
-		'frame05': 'assets/png/test05.png',
-		'frame06': 'assets/png/test06.png',
-		'frame07': 'assets/png/test07.png',
-		'frame08': 'assets/png/test08.png',
-		'frame09': 'assets/png/test08.png',
-		'buri_hamachi': 'assets/mp3/buri_hamachi.mp3'
-	};
-
 	const app = new PIXI.Application({width: 1600, height: 1200});
 
-	window.addEventListener('DOMContentLoaded', () => {
-		document.getElementById('canvas').appendChild(app.view);
-	});
+	/**
+	 * 初期化
+	 */
+	const init = () => {
+
+		window.addEventListener('DOMContentLoaded', () => {
+
+			document.getElementById('canvas').appendChild(app.view);
+
+			document.querySelector('#editor input[name="play"]').addEventListener('click', createAnimation);
+
+		});
+
+	};
+
+	/**
+	 * アニメーション作成
+	 */
+	const createAnimation = () => {
+
+		const nodeList = document.querySelectorAll('#editor input[type="file"]');
+
+		const files = [...nodeList].map(node => node.files[0]);
+
+		if ( files.some(file => ! file) ) {
+			alert('全てのファイルを選択してください');
+			return;
+		}
+
+		const promises = files.map(file => {
+			return new Promise(resolve => {
+				const reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = () => { resolve(reader.result); };
+			});
+		});
+
+		// 
+		Promise.all(promises).then(results => {
+
+			const manifest = {
+				'frame01': results[0],
+				'frame02': results[1],
+				'frame03': results[2],
+				'frame04': results[3],
+				'frame05': results[4],
+				'frame06': results[5],
+				'frame07': results[6],
+				'frame08': results[7],
+				'frame09': results[8],
+				'buri_hamachi': 'assets/mp3/buri_hamachi.mp3'
+			};
+
+			load(manifest);
+
+			document.getElementById('canvas').style.visibility = 'visible';
+
+		});
+
+	};
 
 	/**
 	 * 拍子単位でスプライトをアニメーションする
@@ -117,12 +161,14 @@
 			}
 		});
 
+		play();
+
 	};
 
 	/**
 	 * リソース読み込み
 	 */
-	const load = () => {
+	const load = manifest => {
 
 		const loader = PIXI.loader;
 
@@ -135,6 +181,6 @@
 	};
 
 	// 
-	load();
+	init();
 
 })();
