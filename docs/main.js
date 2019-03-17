@@ -85,7 +85,7 @@
 			}
 		}
 
-		// 
+		// アニメーション
 		frames.forEach(frame => { frame.texture = resources[frame.name].texture; });
 
 		const animation = new AnimatedSpriteByBeat(frames);
@@ -94,14 +94,26 @@
 
 		app.stage.addChild(animation);
 
-		// 
+		// 再生・停止・ループ
+		const play = () => {
+			const promise1 = new Promise(resolve => {
+				animation.onComplete = resolve;
+				animation.gotoAndPlay(0); // Note: play() では最初に戻らない
+			});
+			const promise2 = new Promise(resolve => {
+				music.play(resolve);
+			});
+			Promise.all([promise1, promise2]).then(() => {
+				play();
+			});
+		};
+
 		window.addEventListener('click', () => {
 			if ( animation.playing || music.isPlaying ) {
 				animation.stop();
 				music.stop();
 			} else {
-				animation.gotoAndPlay(0);
-				music.play();
+				play();
 			}
 		});
 
