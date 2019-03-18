@@ -1,6 +1,6 @@
 (() => {
 
-	const app = new PIXI.Application({width: 1600, height: 1200});
+	let app;
 
 	/**
 	 * 初期化
@@ -8,6 +8,8 @@
 	const init = () => {
 
 		window.addEventListener('DOMContentLoaded', () => {
+
+			app = new PIXI.Application({width: 1600, height: 1200});
 
 			document.getElementById('canvas').appendChild(app.view);
 
