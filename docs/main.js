@@ -158,7 +158,9 @@
 			});
 		};
 
-		window.addEventListener('click', () => {
+		app.stage.interactive = true;
+
+		app.stage.on('pointertap', () => {
 			if ( animation.playing || music.isPlaying ) {
 				animation.stop();
 				music.stop();
