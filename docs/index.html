@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="referrer" content="no-referrer">
     <title>「ブリ(ﾟ∀ﾟ)ハマチ」メーカー</title>
     <link rel="stylesheet" href="main.css">
@@ -9,21 +10,21 @@
     <script src="https://cdn.jsdelivr.net/npm/pixi-sound@2.1.0/dist/pixi-sound.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pixi-projection@0.2.6/dist/pixi-projection.min.js"></script>
     <script src="ifie.js"></script>
-    <script src="main.js"></script>
+    <script src="main.js?2019031902"></script>
   </head>
   <body>
     <div id="editor">
-      PNG (1600×1200)
+      PNG, JPEG (アスペクト比 4:3)
       <table>
-        <tr><th>うー</th><td><input type="file" accept=".png, image/png" name="frame01"></td></tr>
-        <tr><th>イェア</th><td><input type="file" accept=".png, image/png" name="frame02"></td></tr>
-        <tr><th>ブリ</th><td><input type="file" accept=".png, image/png" name="frame03"></td></tr>
-        <tr><th>ハマチ</th><td><input type="file" accept=".png, image/png" name="frame04"></td></tr>
-        <tr><th>んばっ</th><td><input type="file" accept=".png, image/png" name="frame05"></td></tr>
-        <tr><th>(後ろに手をまわす)</th><td><input type="file" accept=".png, image/png" name="frame06"></td></tr>
-        <tr><th>(取り出す)</th><td><input type="file" accept=".png, image/png" name="frame07"></td></tr>
-        <tr><th>うふっ(1)</th><td><input type="file" accept=".png, image/png" name="frame08"></td></tr>
-        <tr><th>うふっ(2)</th><td><input type="file" accept=".png, image/png" name="frame09"></td></tr>
+        <tr><th>うー</th><td><input type="file" accept="image/png,image/jpeg" name="frame01"></td></tr>
+        <tr><th>イェア</th><td><input type="file" accept="image/png,image/jpeg" name="frame02"></td></tr>
+        <tr><th>ブリ</th><td><input type="file" accept="image/png,image/jpeg" name="frame03"></td></tr>
+        <tr><th>ハマチ</th><td><input type="file" accept="image/png,image/jpeg" name="frame04"></td></tr>
+        <tr><th>んばっ</th><td><input type="file" accept="image/png,image/jpeg" name="frame05"></td></tr>
+        <tr><th>(後ろに手をまわす)</th><td><input type="file" accept="image/png,image/jpeg" name="frame06"></td></tr>
+        <tr><th>(取り出す)</th><td><input type="file" accept="image/png,image/jpeg" name="frame07"></td></tr>
+        <tr><th>うふっ(1)</th><td><input type="file" accept="image/png,image/jpeg" name="frame08"></td></tr>
+        <tr><th>うふっ(2)</th><td><input type="file" accept="image/png,image/jpeg" name="frame09"></td></tr>
       </table>
       <input type="button" name="play" value="再生">
     </div>

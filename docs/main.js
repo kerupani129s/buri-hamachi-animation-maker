@@ -1,6 +1,9 @@
 (() => {
 
-	const app = new PIXI.Application({width: 1600, height: 1200});
+	const APP_WIDTH = 1600;
+	const APP_HEIGHT = 1200;
+
+	let app;
 
 	/**
 	 * 初期化
@@ -8,6 +11,8 @@
 	const init = () => {
 
 		window.addEventListener('DOMContentLoaded', () => {
+
+			app = new PIXI.Application({width: APP_WIDTH, height: APP_HEIGHT});
 
 			document.getElementById('canvas').appendChild(app.view);
 
@@ -135,6 +140,7 @@
 		const animation = new AnimatedSpriteByBeat(frames);
 
 		animation.loop = false;
+		animation.scale.set(APP_WIDTH / animation.width);
 
 		app.stage.addChild(animation);
 
@@ -152,7 +158,9 @@
 			});
 		};
 
-		window.addEventListener('click', () => {
+		app.stage.interactive = true;
+
+		app.stage.on('pointertap', () => {
 			if ( animation.playing || music.isPlaying ) {
 				animation.stop();
 				music.stop();
