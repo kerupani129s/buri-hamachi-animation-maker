@@ -32,6 +32,7 @@
 			return;
 		}
 
+		// 
 		const promises = files.map(file => {
 			return new Promise(resolve => {
 				const reader = new FileReader();
@@ -39,6 +40,16 @@
 				reader.onload = () => { resolve(reader.result); };
 			});
 		});
+
+		promises.push(new Promise(resolve => {
+			const music = document.getElementById('music');
+			music.load();
+			music.addEventListener('loadeddata', () => {
+				if ( music.readyState >= 4 ) {
+					resolve();
+				}
+			});
+		}));
 
 		// 
 		Promise.all(promises).then(results => {
