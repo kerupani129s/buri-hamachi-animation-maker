@@ -10,15 +10,11 @@
 	 */
 	const init = () => {
 
-		window.addEventListener('DOMContentLoaded', () => {
+		app = new PIXI.Application({width: APP_WIDTH, height: APP_HEIGHT});
 
-			app = new PIXI.Application({width: APP_WIDTH, height: APP_HEIGHT});
+		document.getElementById('canvas').appendChild(app.view);
 
-			document.getElementById('canvas').appendChild(app.view);
-
-			document.querySelector('#editor input[name="play"]').addEventListener('click', createAnimation);
-
-		});
+		document.querySelector('#editor input[name="play"]').addEventListener('click', createAnimation);
 
 	};
 
@@ -56,8 +52,7 @@
 				'frame06': results[5],
 				'frame07': results[6],
 				'frame08': results[7],
-				'frame09': results[8],
-				'buri_hamachi': 'assets/mp3/buri_hamachi.mp3'
+				'frame09': results[8]
 			};
 
 			load(manifest);
@@ -69,33 +64,17 @@
 	};
 
 	/**
-	 * 拍子単位でスプライトをアニメーションする
+	 * リソース読み込み
 	 */
-	const AnimatedSpriteByBeat = class extends PIXI.extras.AnimatedSprite {
+	const load = manifest => {
 
-		/**
-		 * frames: {texture, note, bpm} の配列
-		 * - note: 音符の長さ (単位: 拍子)
-		 * - bpm: 省略可 (デフォルト: 120)
-		 */
-		constructor(frames) {
+		const loader = PIXI.loader;
 
-			let bpm = 120;
+		Object.entries(manifest).forEach(([key, value]) => {
+			loader.add(key, value);
+		});
 
-			const frameObjects = frames.map(frame => {
-
-				const texture = frame.texture;
-
-				if ( frame.bpm ) bpm = frame.bpm;
-				const time = 60 / bpm * 4 * frame.note * 1000;
-
-				return {texture, time};
-
-			});
-
-			super(frameObjects);
-
-		}
+		loader.load(loaded);
 
 	};
 
@@ -105,9 +84,7 @@
 	const loaded = (loader, resources) => {
 
 		// 
-		const music = resources['buri_hamachi'].sound;
-
-		music.singleInstance = true;
+		const music = document.getElementById('music');
 
 		// テクスチャ名と音価と BPM の設定
 		const frames = [];
@@ -151,7 +128,9 @@
 				animation.gotoAndPlay(0); // Note: play() では最初に戻らない
 			});
 			const promise2 = new Promise(resolve => {
-				music.play(resolve);
+				music.currentTime = 0;
+				music.play();
+				music.addEventListener('ended', resolve);
 			});
 			Promise.all([promise1, promise2]).then(() => {
 				play();
@@ -161,9 +140,9 @@
 		app.stage.interactive = true;
 
 		app.stage.on('pointertap', () => {
-			if ( animation.playing || music.isPlaying ) {
+			if ( animation.playing || ! music.paused ) {
 				animation.stop();
-				music.stop();
+				music.pause();
 			} else {
 				play();
 			}
@@ -174,21 +153,39 @@
 	};
 
 	/**
-	 * リソース読み込み
+	 * 拍子単位でスプライトをアニメーションする
 	 */
-	const load = manifest => {
+	const AnimatedSpriteByBeat = class extends PIXI.extras.AnimatedSprite {
 
-		const loader = PIXI.loader;
+		/**
+		 * frames: {texture, note, bpm} の配列
+		 * - note: 音符の長さ (単位: 拍子)
+		 * - bpm: 省略可 (デフォルト: 120)
+		 */
+		constructor(frames) {
 
-		Object.entries(manifest).forEach(([key, value]) => {
-			loader.add(key, value);
-		});
+			let bpm = 120;
 
-		loader.load(loaded);
+			const frameObjects = frames.map(frame => {
+
+				const texture = frame.texture;
+
+				if ( frame.bpm ) bpm = frame.bpm;
+				const time = 60 / bpm * 4 * frame.note * 1000;
+
+				return {texture, time};
+
+			});
+
+			super(frameObjects);
+
+		}
 
 	};
 
 	// 
-	init();
+	window.addEventListener('DOMContentLoaded', () => {
+		init();
+	});
 
 })();
