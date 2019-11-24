@@ -4,6 +4,7 @@
 	const APP_HEIGHT = 1200;
 
 	let app;
+	let recorder;
 
 	/**
 	 * 初期化
@@ -54,6 +55,25 @@
 		// 
 		Promise.all(promises).then(results => {
 
+			// レコーダー初期化
+			const videoTrack = document.getElementById('canvas').firstChild.captureStream().getVideoTracks()[0];
+			const audioTrack = document.getElementById('music').captureStream().getAudioTracks()[0];
+			const mediaStream = new MediaStream([videoTrack, audioTrack]);
+
+			recorder = new MediaRecorder(mediaStream);
+			const chunks = [];
+
+			recorder.ondataavailable = event => chunks.push(event.data);
+			recorder.onstop = () => {
+				const webm = new Blob(chunks, { 'type' : 'video/webm' });
+				const url = window.URL.createObjectURL(webm);
+				const a = document.createElement('a');
+				a.setAttribute('href', url);
+				a.setAttribute('download', 'buri-hamachi.webm');
+				a.click();
+			};
+
+			// 画像を PIXI に読み込み
 			const manifest = {
 				'frame01': results[0],
 				'frame02': results[1],
@@ -134,6 +154,7 @@
 
 		// 再生・停止・ループ
 		const play = () => {
+			recorder.start();
 			const promise1 = new Promise(resolve => {
 				animation.onComplete = resolve;
 				animation.gotoAndPlay(0); // Note: play() では最初に戻らない
@@ -144,6 +165,7 @@
 				music.addEventListener('ended', resolve);
 			});
 			Promise.all([promise1, promise2]).then(() => {
+				recorder.stop();
 				play();
 			});
 		};
@@ -154,6 +176,7 @@
 			if ( animation.playing || ! music.paused ) {
 				animation.stop();
 				music.pause();
+				recorder.stop();
 			} else {
 				play();
 			}
