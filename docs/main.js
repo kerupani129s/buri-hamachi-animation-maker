@@ -3,6 +3,8 @@
 	const APP_WIDTH = 1600;
 	const APP_HEIGHT = 1200;
 
+	const supportedVp8 = MediaRecorder.isTypeSupported('video/webm; codecs=vp8');
+
 	let app;
 	let recorder;
 
@@ -55,17 +57,29 @@
 		// 
 		Promise.all(promises).then(results => {
 
-			// レコーダー初期化
-			const videoTrack = document.getElementById('canvas').firstChild.captureStream().getVideoTracks()[0];
-			const audioTrack = document.getElementById('music').captureStream().getAudioTracks()[0];
+			// キャプチャー対象
+			const videoElement = document.getElementById('canvas').firstChild;
+			const audioElement = document.getElementById('music');
+
+			const videoStream = ( 'captureStream' in videoElement ) ? videoElement.captureStream() : videoElement.mozCaptureStream();
+			const audioStream = ( 'captureStream' in audioElement ) ? audioElement.captureStream() : audioElement.mozCaptureStream();
+
+			const videoTrack = videoStream.getVideoTracks()[0];
+			const audioTrack = audioStream.getAudioTracks()[0];
+
 			const mediaStream = new MediaStream([videoTrack, audioTrack]);
 
-			recorder = new MediaRecorder(mediaStream);
+			// レコーダー初期化
+			if ( supportedVp8 ) {
+				recorder = new MediaRecorder(mediaStream, {mimeType: 'video/webm; codecs=vp8'});
+			} else {
+				recorder = new MediaRecorder(mediaStream);
+			}
 			const chunks = [];
 
 			recorder.ondataavailable = event => chunks.push(event.data);
 			recorder.onstop = () => {
-				const webm = new Blob(chunks, { 'type' : 'video/webm' });
+				const webm = new Blob(chunks, {'type' : (supportedVp8 ? 'video/webm; codecs=vp8' : 'video/webm')});
 				const url = window.URL.createObjectURL(webm);
 				const a = document.createElement('a');
 				a.setAttribute('href', url);
