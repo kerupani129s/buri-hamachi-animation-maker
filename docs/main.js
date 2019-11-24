@@ -46,12 +46,14 @@
 
 		promises.push(new Promise(resolve => {
 			const music = document.getElementById('music');
-			music.load();
 			music.addEventListener('loadeddata', () => {
 				if ( music.readyState >= 4 ) {
 					resolve();
 				}
 			});
+			if ( music.readyState >= 4 ) { // loadeddata イベントハンドラの設定前に読み込み終わっていた場合
+				resolve();
+			}
 		}));
 
 		// 
@@ -174,9 +176,9 @@
 				animation.gotoAndPlay(0); // Note: play() では最初に戻らない
 			});
 			const promise2 = new Promise(resolve => {
+				music.addEventListener('ended', resolve);
 				music.currentTime = 0;
 				music.play();
-				music.addEventListener('ended', resolve);
 			});
 			Promise.all([promise1, promise2]).then(() => {
 				recorder.stop();
