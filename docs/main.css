@@ -21,8 +21,8 @@ html, body {
 	margin-right: auto;
 }
 
-/* キャンバス */
-#canvas {
+/* 出力画面 */
+#screen {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -34,7 +34,7 @@ html, body {
 	background-color: #888;
 }
 
-#canvas>canvas:first-of-type {
+#screen>canvas:first-of-type {
 	max-width: 100vw;
 	max-height: 100vh;
 	width: calc(100vh * 4 / 3);
